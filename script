@@ -1,0 +1,41 @@
+#!/bin/bash
+collection=()
+
+function collection_add(){
+	#Artist:
+	#Album:
+	#Format:
+	declare -a collection=("Lady Gaga" "Chromatica" "vinyl")
+	echo "Success!"
+}
+
+function collection_view(){}
+
+function collection_filter(){}
+
+function wishlist_download(){}
+
+
+while getopts a:b:c: opt;
+do
+	case $opt in
+		a)
+			printf "Artist: %s\nAlbum: %s\nFormat: %s" "${collection[@]}"
+			;;
+		b)
+			echo "B option"
+			;;
+		c)
+			echo "C option"
+			;;
+		:)
+			echo "$OPTARG needs a parameter!"
+			;;
+		*)
+			echo "Unknown option: $OPTARG"
+			;;
+	esac
+done
+
+
+
