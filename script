@@ -1,41 +1,60 @@
 #!/bin/bash
 collection=()
+#hello="Hello World!"
 
 function collection_add(){
-	#Artist:
-	#Album:
-	#Format:
-	declare -a collection=("Lady Gaga" "Chromatica" "vinyl")
-	echo "Success!"
+	echo "Add meg az előadót: "
+	read ARTIST
+	echo "Add meg az albumot: "
+	read ALBUM
+	echo "Add meg a formátumot (CD/vinyl/kazetta/digitális): "
+	read FORMAT
+
+	#declare -a collection=("Lady Gaga" "Chromatica" "CD")
+	collection=("$ARTIST" "$ALBUM" "$FORMAT")
+
+	echo "Ez lett hozzáadva a gyűjteményedhez:"
+	printf "\tElőadó: %s\n\tAlbum: %s\n\tFormátum: %s\n" "${collection[@]}"
+
+	echo "Sikeres hozzáadás!"
+	echo ""
 }
 
-function collection_view(){}
+function collection_view(){
+	for i in "${collection[@]}"
+	do
+		echo "Előadó: %s Album: %s Formátum: %s\n" "${collection[@]}"
+	done
+}
 
-function collection_filter(){}
+collection_add
+#collection_view
 
-function wishlist_download(){}
+function collection_filter(){
+	echo "You can filter your collection here!"
+}
 
+function collection_write_to_txt(){
+	for i in "${collection[@]}"
+	do
+		echo $i
+	done >>collection.txt
+}
 
-while getopts a:b:c: opt;
-do
-	case $opt in
-		a)
-			printf "Artist: %s\nAlbum: %s\nFormat: %s" "${collection[@]}"
-			;;
-		b)
-			echo "B option"
-			;;
-		c)
-			echo "C option"
-			;;
-		:)
-			echo "$OPTARG needs a parameter!"
-			;;
-		*)
-			echo "Unknown option: $OPTARG"
-			;;
-	esac
-done
+collection_write_to_txt
+
+#while getopts :a:b: opt; do
+#	case $opt in
+#		a)
+#			collection_filter
+#			;;
+#		b)
+#			collection_view
+#			;;
+#		?)
+#			echo "Nem kezelt opció: $OPTARG"
+#	esac
+#done
 
 
 
