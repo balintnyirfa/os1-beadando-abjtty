@@ -1,6 +1,5 @@
 #!/bin/bash
 collection=()
-#hello="Hello World!"
 
 function collection_add(){
 	echo "Add meg az előadót: "
@@ -16,8 +15,8 @@ function collection_add(){
 	echo "Ez lett hozzáadva a gyűjteményedhez:"
 	printf "\tElőadó: %s\n\tAlbum: %s\n\tFormátum: %s\n" "${collection[@]}"
 
-	echo "Sikeres hozzáadás!"
-	echo ""
+	collection_write_to_txt
+	echo "Sikeres fájlba íratás!"
 }
 
 function collection_view(){
@@ -27,11 +26,12 @@ function collection_view(){
 	done
 }
 
-#collection_add
-#collection_view
-
 function collection_from_file(){
-	echo "Fájlból kiolvasás!"
+	filename='collection.txt'
+	while read line;
+	do
+		echo $line
+	done < $filename
 }
 
 function collection_write_to_txt(){
@@ -41,27 +41,17 @@ function collection_write_to_txt(){
 	done >>collection.txt
 }
 
-#collection_write_to_txt
-
-options=("[a] - Hozzáadás a gyűjteményhez [w] - Fájlbaírás")
-
-while getopts :a:w opt
+while getopts :af opt
 do
 	case $opt in
 		a)
 			collection_add
 			;;
-		w)
-			collection_write_to_txt
+		f)
+			collection_from_file
 			;;
-#		:)
-#			echo "$OPTARG vár értéket"
-#			exit
 		?)
 			echo "Nem kezelt opció: $OPTARG"
 			exit
 	esac
 done
-
-
-
