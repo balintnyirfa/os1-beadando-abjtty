@@ -27,11 +27,11 @@ function collection_view(){
 	done
 }
 
-collection_add
+#collection_add
 #collection_view
 
-function collection_filter(){
-	echo "You can filter your collection here!"
+function collection_from_file(){
+	echo "Fájlból kiolvasás!"
 }
 
 function collection_write_to_txt(){
@@ -41,20 +41,27 @@ function collection_write_to_txt(){
 	done >>collection.txt
 }
 
-collection_write_to_txt
+#collection_write_to_txt
 
-#while getopts :a:b: opt; do
-#	case $opt in
-#		a)
-#			collection_filter
-#			;;
-#		b)
-#			collection_view
-#			;;
-#		?)
-#			echo "Nem kezelt opció: $OPTARG"
-#	esac
-#done
+options=("[a] - Hozzáadás a gyűjteményhez [w] - Fájlbaírás")
+
+while getopts :a:w opt
+do
+	case $opt in
+		a)
+			collection_add
+			;;
+		w)
+			collection_write_to_txt
+			;;
+#		:)
+#			echo "$OPTARG vár értéket"
+#			exit
+		?)
+			echo "Nem kezelt opció: $OPTARG"
+			exit
+	esac
+done
 
 
 
