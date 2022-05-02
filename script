@@ -2,12 +2,15 @@
 collection=()
 
 function collection_add(){
-	echo "Add meg az előadót: "
+	echo -n "Add meg az előadót: "
 	read ARTIST
-	echo "Add meg az albumot: "
+	#ARTIST=$(artist '+%a')
+	echo -n "Add meg az albumot: "
 	read ALBUM
-	echo "Add meg a formátumot (CD/vinyl/kazetta/digitális): "
+	#album=$ALBUM
+	echo -n "Add meg a formátumot (CD/vinyl/kazetta/digitális): "
 	read FORMAT
+	#format=$FORMAT
 
 	#declare -a collection=("Lady Gaga" "Chromatica" "CD")
 	collection=("$ARTIST" "$ALBUM" "$FORMAT")
@@ -35,21 +38,29 @@ function collection_from_file(){
 }
 
 function collection_write_to_txt(){
-	for i in "${collection[@]}"
-	do
-		echo $i
-	done >>collection.txt
+	printf "%s\t%s\t%s\n" "${collection[@]}" >>collection.txt
+	#for i in "${collection[@]}"
+	#do
+	#	echo $i
+	#done >>collection.txt
 }
 
-while getopts :af opt
+
+
+while getopts :awf opt
 do
 	case $opt in
 		a)
 			collection_add
 			;;
-		f)
+		w)
 			collection_from_file
 			;;
+		f)
+			echo -n "Milyen szűrést szeretnél elvégezni?\n\t[1] - Hány darab CD/vinyl/kazetta van a gyűjteményedben?\n\t[2] - Hány darab albumod van ugyanattól az eladótól?"
+			read opt
+			case $opt
+				opt
 		?)
 			echo "Nem kezelt opció: $OPTARG"
 			exit
