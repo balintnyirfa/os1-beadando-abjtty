@@ -31,21 +31,39 @@ function collection_view(){
 
 function collection_from_file(){
 	filename='collection.txt'
-	while read line;
+	printf "Előadó\tAlbum\tFormátum\n"
+	while IFS=':' read -r artist album format;
 	do
-		echo $line
+		printf "%s\t%s\t%s\n" "$artist $album $format"
 	done < $filename
 }
 
 function collection_write_to_txt(){
-	printf "%s\t%s\t%s\n" "${collection[@]}" >>collection.txt
+	printf "%s:%s:%s\n" "${collection[@]}" >>collection.txt
 	#for i in "${collection[@]}"
 	#do
 	#	echo $i
 	#done >>collection.txt
 }
 
+function collection_filter_count_formats(){
+	echo -n "Melyik formátumot szeretnéd megszámolni? [CD/vinyl/kazetta] "
+	read filter_format
+	while IFS=':' read -r artist album format
+	do
+		grep -c "$filter_format"
+	done < collection.txt
+}
 
+function collection_filter_display_matched_lines(){
+	echo -n "Melyik előadótól szeretnéd megjeleníteni a mentett albumaidat? [Add meg a nevét!] "
+	read filter_artist
+	grep -n "$filter_artist" collection.txt
+	#while IFS=':' read -r artist album format
+	#do
+	#	grep -n "$filter_artist" collection.txt
+	#done < collection.txt
+}
 
 while getopts :awf opt
 do
@@ -57,10 +75,23 @@ do
 			collection_from_file
 			;;
 		f)
-			echo -n "Milyen szűrést szeretnél elvégezni?\n\t[1] - Hány darab CD/vinyl/kazetta van a gyűjteményedben?\n\t[2] - Hány darab albumod van ugyanattól az eladótól?"
-			read opt
-			case $opt
-				opt
+			echo "Milyen szűrést szeretnél elvégezni?"
+			echo "	[1] - Hány darab CD/vinyl/kazetta van a gyűjteményedben?"
+			echo "	[2] - Hány darab albumod van ugyanattól az előadótól?"
+			echo -n "Válassz [1/2]: "
+			read option
+			case $option in
+				"1")
+				collection_filter_count_formats
+				;;
+				"2")
+				collection_filter_display_matched_lines
+				;;
+				*)
+				echo "Nem kezelt lehetőség: $option"
+				;;
+			esac
+			;;
 		?)
 			echo "Nem kezelt opció: $OPTARG"
 			exit
