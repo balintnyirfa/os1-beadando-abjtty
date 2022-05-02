@@ -39,7 +39,14 @@ function collection_from_file(){
 }
 
 function collection_write_to_txt(){
-	printf "%s:%s:%s\n" "${collection[@]}" >>collection.txt
+	filename='collection.txt'
+	if [ -f "$filename" ];
+	then
+		printf "%s:%s:%s\n" "${collection[@]}" >>collection.txt
+	else
+		echo "Előadó:Album:Formátum" >>collection.txt
+		printf "%s:%s:%s\n" "${collection[@]}" >>collection.txt
+	fi
 	#for i in "${collection[@]}"
 	#do
 	#	echo $i
@@ -65,7 +72,12 @@ function collection_filter_display_matched_lines(){
 	#done < collection.txt
 }
 
-while getopts :awf opt
+function wishlist_download(){
+	curl -L "https://drive.google.com/uc?export=download&id=1x33dznQkQ548m6YxloLJxj6fWmGY76Gm" -o kivansaglista.zip
+	#curl -O https://kennisopenbaarbestuur.nl/media/257225/ai_now_2018_report.pdf
+}
+
+while getopts :awfd opt
 do
 	case $opt in
 		a)
@@ -91,6 +103,9 @@ do
 				echo "Nem kezelt lehetőség: $option"
 				;;
 			esac
+			;;
+		d)
+			wishlist_download
 			;;
 		?)
 			echo "Nem kezelt opció: $OPTARG"
